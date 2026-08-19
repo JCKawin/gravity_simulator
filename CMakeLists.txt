@@ -23,7 +23,11 @@ file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
 )
 
 
-add_executable(${PROJECT_NAME} ${SOURCES})
+add_executable(${PROJECT_NAME} ${SOURCES}
+        src/Particle.cpp
+        src/Particle.h
+        src/ParticleManager.cpp
+        src/ParticleManager.h)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE raylib)
 
