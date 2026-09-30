@@ -13,22 +13,39 @@ static const int initial_radius = 1;
 struct Particle {
     double radius;
     Vector2 velocity;
-    int x;
-    int y;
+    double x;
+    double y;
     double mass;
 
-    Particle(double radius, int x, int y, double mass = 1.0, Vector2 velocity = Vector2(0, 0)) {
+
+    Particle(double radius, double x, double y, double mass = 5.9722e12, Vector2 velocity = Vector2(0, 0)) {
         this->radius = radius;
         this->x = x;
         this->y = y;
         this->mass = mass;
         this->velocity = velocity;
+
     }
 };
 
+int on_collision (std::vector<Particle>& particles ,const int p1 ,const int p2) {
+    Particle particle_1 = particles.at(p1);
+    Particle particle_2 = particles.at(p2);
+
+    if (particle_1.radius > particle_2.radius) {
+        particle_1.radius += particle_2.radius;
+        return p2;
+    }
+    else  {
+        particle_2.radius += particle_1.radius;
+        return p1;
+    }
+}
+
+
 Vector2 net_acceleration(
     const int particle_index,
-    const std::vector<Particle> &particles,
+    std::vector<Particle> &particles,
     double G = 6.67430e-11,
     double softeningSq = 1e-9) {
     Vector2 net_accel{0.0, 0.0};
@@ -100,7 +117,10 @@ int main() {
         BeginDrawing();
         ClearBackground(BLACK);
         for (auto &particle: particles) {
-            DrawCircle(particle.x, particle.y, particle.radius, WHITE);
+            DrawCircle(static_cast<int> (particle.x),
+                static_cast<int>
+                (
+                    particle.y), particle.radius, WHITE);
         }
 
         // DrawText("Gravity Simulator", 190, 200, 20, LIGHTGRAY);
